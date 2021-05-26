@@ -1,0 +1,375 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+        window.onload = function () {
+            // Variables
+            const baseDeDatos = [
+                {
+                    id: 1,
+                    nombre: 'IG Tone',
+                    precio: 17,
+                    imagen: 'images/audifonos/Audifono1.jpg'
+                },
+                {
+                    id: 2,
+                    nombre: 'Sport Fit G-4',
+                    precio: 14,
+                    imagen: 'images/audifonos/Audifono2.jpg'
+                },
+                {
+                    id: 3,
+                    nombre: 'Sport Pulse X-3',
+                    precio: 12,
+                    imagen: 'images/audifonos/Audifono3.jpg'
+                },
+                {
+                    id: 4,
+                    nombre: 'Sound True GH-17',
+                    precio: 5,
+                    imagen: 'images/audifonos/Audifono4.jpg'
+                },
+                {
+                    id: 5,
+                    nombre: 'Ear Phone Elite',
+                    precio: 4,
+                    imagen: 'images/audifonos/Audifono5.jpg'
+                },
+                {
+                    id: 6,
+                    nombre: 'Extra Bass GEH-010',
+                    precio: 12,
+                    imagen: 'images/audifonos/Audifono6.jpg'
+                },
+                 {
+                    id: 7,
+                    nombre: 'G Moster GH-23',
+                    precio: 5,
+                    imagen: 'images/audifonos/Audifono7.jpg'
+                },
+                 {
+                    id: 8,
+                    nombre: 'HeadSet IG-2',
+                    precio: 12,
+                    imagen: 'images/audifonos/Audifono8.jpg'
+                },
+                 {
+                    id: 9,
+                    nombre: 'G Moster GM-07',
+                    precio: 21,
+                    imagen: 'images/audifonos/Audifono9.jpg'
+                },
+                 {
+                    id: 10,
+                    nombre: 'Tech Sound GH-08',
+                    precio: 8,
+                    imagen: 'images/audifonos/Audifono10.jpg'
+                },
+                 {
+                    id: 11,
+                    nombre: 'Gaming Moster GM-3',
+                    precio: 1,
+                    imagen: 'images/audifonos/Audifono11.jpg'
+                },
+                 {
+                    id: 12,
+                    nombre: 'Extra Bass GH-30',
+                    precio: 12,
+                    imagen: 'images/audifonos/Audifono12.jpg'
+                },
+                 {
+                    id: 13,
+                    nombre: 'Ear Buds IG-7',
+                    precio: 11,
+                    imagen: 'images/audifonos/Audifono13.jpg'
+                },
+
+            ];
+
+            let carrito = [];
+            let total = 0;
+            const DOMitems = document.querySelector('#items');
+            const DOMcarrito = document.querySelector('#carrito');
+            const DOMtotal = document.querySelector('#total');
+            const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+            const miLocalStorage = window.localStorage;
+
+            // Funciones
+
+            /**
+            * Dibuja todos los productos a partir de la base de datos. No confundir con el carrito
+            */
+            function renderizarProductos() {
+                baseDeDatos.forEach((info) => {
+                    // Estructura
+                    const miNodo = document.createElement('div');
+                    miNodo.classList.add('card', 'col-sm-6');
+                    // Body
+                    const miNodoCardBody = document.createElement('div');
+                    miNodoCardBody.classList.add('card-body');
+                    // Titulo
+                    const miNodoTitle = document.createElement('h6');
+                    miNodoTitle.classList.add('card-title');
+                    miNodoTitle.textContent = info.nombre;
+                    // Imagen
+                    const miNodoImagen = document.createElement('img');
+                    miNodoImagen.classList.add('img-fluid');
+                    miNodoImagen.setAttribute('src', info.imagen);
+                    // Precio
+                    const miNodoPrecio = document.createElement('p');
+                    miNodoPrecio.classList.add('card-text');
+                    miNodoPrecio.textContent = ''+info.precio+' '+'USD';
+                    // Boton 
+                    const miNodoBoton = document.createElement('button');
+                    miNodoBoton.classList.add('btn', 'btn-primary');
+                    miNodoBoton.textContent = '+';
+                    miNodoBoton.setAttribute('marcador', info.id);
+                    miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                    // Insertamos
+                    miNodoCardBody.appendChild(miNodoImagen);
+                    miNodoCardBody.appendChild(miNodoTitle);
+                    miNodoCardBody.appendChild(miNodoPrecio);
+                    miNodoCardBody.appendChild(miNodoBoton);
+                    miNodo.appendChild(miNodoCardBody);
+                    DOMitems.appendChild(miNodo);
+                });
+            }
+
+            /**
+            * Evento para añadir un producto al carrito de la compra
+            */
+            function anyadirProductoAlCarrito(evento) {
+                // Anyadimos el Nodo a nuestro carrito
+                carrito.push(evento.target.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Actualizamos el carrito 
+                renderizarCarrito();
+                // Actualizamos el LocalStorage
+                guardarCarritoEnLocalStorage();
+            }
+
+            /**
+            * Dibuja todos los productos guardados en el carrito
+            */
+            function renderizarCarrito() {
+                // Vaciamos todo el html
+                DOMcarrito.textContent = '';
+                // Quitamos los duplicados
+                const carritoSinDuplicados = [...new Set(carrito)];
+                // Generamos los Nodos a partir de carrito
+                carritoSinDuplicados.forEach((item) => {
+                    // Obtenemos el item que necesitamos de la variable base de datos
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                        // ¿Coincide las id? Solo puede existir un caso
+                        return itemBaseDatos.id === parseInt(item);
+                    });
+                    // Cuenta el número de veces que se repite el producto
+                    const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+                        // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+                        return itemId === item ? total += 1 : total;
+                    }, 0);
+                    // Creamos el nodo del item del carrito
+                    const miNodo = document.createElement('li');
+                    miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
+                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio}USD`;
+                    // Boton de borrar
+                    const miBoton = document.createElement('button');
+                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                    miBoton.textContent = 'X';
+                    miBoton.style.marginLeft = '1rem';
+                    miBoton.dataset.item = item;
+                    miBoton.addEventListener('click', borrarItemCarrito);
+                    // Mezclamos nodos
+                    miNodo.appendChild(miBoton);
+                    DOMcarrito.appendChild(miNodo);
+                });
+            }
+
+            /**
+            * Evento para borrar un elemento del carrito
+            */
+            function borrarItemCarrito(evento) {
+                // Obtenemos el producto ID que hay en el boton pulsado
+                const id = evento.target.dataset.item;
+                // Borramos todos los productos
+                carrito = carrito.filter((carritoId) => {
+                    return carritoId !== id;
+                });
+                // volvemos a renderizar
+                renderizarCarrito();
+                // Calculamos de nuevo el precio
+                calcularTotal();
+                // Actualizamos el LocalStorage
+                guardarCarritoEnLocalStorage();
+
+            }
+
+            /**
+            * Calcula el precio total teniendo en cuenta los productos repetidos
+            */
+            function calcularTotal() {
+                // Limpiamos precio anterior
+                total = 0;
+                // Recorremos el array del carrito
+                carrito.forEach((item) => {
+                    // De cada elemento obtenemos su precio
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                        return itemBaseDatos.id === parseInt(item);
+                    });
+                    total = total + miItem[0].precio;
+                });
+                // Renderizamos el precio en el HTML
+                DOMtotal.textContent = total.toFixed(0);
+            }
+
+            /**
+            * Varia el carrito y vuelve a dibujarlo
+            */
+            function vaciarCarrito() {
+                // Limpiamos los productos guardados
+                carrito = [];
+                // Renderizamos los cambios
+                renderizarCarrito();
+                calcularTotal();
+                // Borra LocalStorage
+                localStorage.clear();
+
+            }
+
+            function guardarCarritoEnLocalStorage () {
+                miLocalStorage.setItem('carrito', JSON.stringify(carrito));
+            }
+
+            function cargarCarritoDeLocalStorage () {
+                // ¿Existe un carrito previo guardado en LocalStorage?
+                if (miLocalStorage.getItem('carrito') !== null) {
+                    // Carga la información
+                    carrito = JSON.parse(miLocalStorage.getItem('carrito'));
+                }
+            }
+
+            // Eventos
+            DOMbotonVaciar.addEventListener('click', vaciarCarrito);
+
+            // Inicio
+            cargarCarritoDeLocalStorage();
+            renderizarProductos();
+            calcularTotal();
+            renderizarCarrito();
+        }
+
+    </script>
+    <script type="text/javascript">
+    	
+ jQuery(function(){
+    jQuery(window).scroll(function(){
+        if(jQuery(this).scrollTop() > 200) {
+            jQuery('#img')
+                .css({'width':'100px','height':'84px'})
+                .attr('src','images/logo1.jpg');
+        }
+        if(jQuery(this).scrollTop() < 200) {
+            jQuery('#img')
+                .css({'width':'200px',
+                	'height':'94px',
+					'-webkit-transition':'all 0.5s ease',
+					'-moz-transition':'all 0.5s ease',
+					'-ms-transition':'all 0.5s ease',
+					'-o-transition':'all 0.5s ease',
+					'transition':'all 0.5s ease'
+                	})    
+                .attr('src','images/logo1.jpg');
+        }
+    });
+});
+
+
+    </script>
+</head>
+<body background="images/fondo.png">
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+   <a href="index.html"><img id="img" src="images/logo1.jpg" class="img-fluid w-15 " width="200" height="84" style="width: 200px; height: 94px; transition: all 0.5s ease 0s;"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Inicio <span class="sr-only">(current)</span></a>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Productos
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="cargadores.html">CARGADORES</a>
+          <a class="dropdown-item" href="audifonos.html">AUDIFONOS</a>
+          <a class="dropdown-item" href="holders.html">HOLDERS</a>
+          <a class="dropdown-item" href="parlantes.html">PARLANTES</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contacto.html">Contacto</a>
+      </li>
+    </ul>
+    
+    <!-- <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form> -->
+  </div>
+</nav>
+
+    <div  class="row no-gutters">
+     <div class="col-12 col-sm-6 col-md-8">.col-12 .col-sm-6 .col-md-8</div>
+            <aside  class="col-6 col-md-4">
+                <h2 class="text-light link">Carrito<img src="images/carro.png" width="30" height="30"></h2>
+                <!-- Elementos del carrito -->
+                <ul id="carrito" class="list-group"></ul>
+                <hr>
+                <!-- Precio total -->
+                <p class="text-right" style="color: white;">Total: <span id="total"></span></p>
+                <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
+
+                <button id="pagar" class="btn btn-success">Pagar</button>
+            </aside>
+        </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Elementos generados a partir del JSON -->
+            <main id="items" class="col-sm-8 row"></main>
+            <!-- Carrito -->
+        </div>
+    </div>
+    
+<br>
+    <br>
+
+    <footer>
+    	<div id="whatsAppWidget" style="position: fixed; right: 20px; bottom: 3px; float: left; margin-bottom: 60px; z-index:20;"><a href="https://api.whatsapp.com/send?phone=573204900856" target="_blank"><div style="float: right; height: 40px; width: 40px; border-radius: 50%; overflow: hidden; box-shadow: 2px 2px 6px rgba(0,0,0,0.4); text-align: center; line-height: 30px; color: white; background-color: #4dc247;"><svg style="display: inline; fill: white" viewBox="0 0 32 32" width="45px" height="50px" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z" fill-rule="evenodd"></path></svg></div><span style="border-radius: 3px; box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3); display: block; float: left; margin-top: 6px; padding: 8px; max-width: 90px; min-width: 34px; font-size: 12px; font-weight: 500; color: #8a8a8a; background-color: #ffffff; box-sizing: content-box; line-height: initial; clear: both; word-break: break-word;">Consultas: Todos los Días de 9am a 9pm </span></a></div>
+    	<center><font color="black" face="georgia" size="4"><marquee width="100" scrollamount="5" bgcolor="#FFFFFF">VENTA DE TODO TIPO DE ACCESORIOS PARA CELULAR</marquee></font><br>
+    	<div class="footer">
+     <a href="https://www.instagram.com/igoma_official/"><img src="images/footer/instagram.png" alt="" width="50px" height="50px"></a>
+      <a href="https://api.whatsapp.com/send?phone=573204900856"><img src="images/footer/whatsapp.png" alt="" width="50px" height="50px"></a>
+      <a href="https://web.facebook.com/ETaccesorios"><img src="images/footer/facebook.png" alt="" width="50px" height="50px"></a>
+      <a href="https://www.youtube.com/channel/UCo331qBHgFpQl4ltgvjYLjg"><img src="images/footer/youtube.png" alt="" width="50px" height="50px"></a>
+    </div></center>
+    </footer>
+    
+</body>
+</html>
